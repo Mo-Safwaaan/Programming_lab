@@ -37,14 +37,13 @@ class array {
 			cout << "Value not found!\n" ; 
 		} 
 
-		void search( T val ) {
+		int search( T val ) {
 			for ( int i = 0 ; i < size ; i++ ) {
-				if ( new_array[i] == val ) {
-					cout << val <<" found at index " << i << "\n" ; 
-					return ;
+				if ( new_array[i] == val ) { 
+					return 1  ;
 				}
 			}
-			cout << val << " not found in the array!\n" ; 
+		        return 0 ;	
 		}
 		
                 void display() {
