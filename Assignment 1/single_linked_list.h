@@ -13,7 +13,7 @@ class node {
 		} 	
 };
 
-template < typename T > 
+itemplate < typename T > 
 class linked_list {
 	public : 
 		node<T>* head ;
@@ -35,6 +35,23 @@ class linked_list {
 			}
 
 		}
+
+		void delete_front(){
+			if ( head == NULL ) {
+                                cout << "Linked list is empty!\n" ;
+                                return ;
+                        }
+                        else {
+                                node<T>* temp = head ;
+                                head = head->next ; 
+				delete temp ; 
+
+                        }
+
+                }
+		
+
+
 
 	        void insert_end ( T val ){
 			node<T>* new_node = new node<T> ; 
@@ -154,9 +171,9 @@ int main() {
 	char_list.display() ;
 	char_list.search('d') ;
         char_list.search('a') ;
-	char_list.search('c');
-	char_list.deletion('a') ; 
-	char_list.delete_end() ; 
+	char_list.search('c'); 
+	char_list.delete_front() ;
+        char_list.delete_front() ;	
 	char_list.display() ;
 	char_list.search('a') ;
         

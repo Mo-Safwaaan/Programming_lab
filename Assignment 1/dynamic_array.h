@@ -48,12 +48,41 @@ class dynamic_array {
 			}
                 }
 
+		void push_front( int val ){
+			if ( this->size == ( this->pointer + 1 ) ) {
+                                resize( 2 * this->size ) ;
+                                this->pointer++ ; 
+                                for( int i = this->pointer ; i > 0  ; i-- ){
+					this->new_array[i] = this->new_array[ i - 1 ] ; 
+				}
+				this->new_array[0] = val ; 
+                        }
+                        else{
+                                this->pointer++ ;
+                                for( int i = this->pointer ; i > 0 ; i-- ){
+                                        this->new_array[i] = this->new_array[ i - 1 ] ;
+                                }
+                                this->new_array[0] = val ;
+                        }
+
+		}
+
                 void delete_end() {
 			if ( this->pointer  == ( this->size / 4 ) ) {
 				resize( this->size / 2 ) ; 
 			}
 			this->pointer-- ; 
                 }
+
+		void delete_front(){
+			if ( this->pointer  == ( this->size / 4 ) ) {
+                                resize( this->size / 2 ) ;
+                        }
+                        for( int i = 0 ; i < this->pointer ; i++  ){
+				this->new_array[i] = this->new_array[i + 1] ;  
+			}
+			this->pointer-- ; 
+		}
 
                 void search( int val ) {
                         for ( int i = 0 ; i < this->size ; i++ ) {
@@ -74,34 +103,36 @@ class dynamic_array {
 
 } ;
 #endif
+
 /*
 int main() {
 	dynamic_array<int> arr ;
-        cout << "Pushed 10 and 20\n" ; 	
+        cout << "Pushed 10 and 20 \n" ; 	
 	arr.push_back(10) ; 	
 	arr.push_back(20) ;
-        cout << "pushed 30, 40 and 50  \n" ; 
-	arr.push_back(30)  ;
-        arr.push_back(40)  ; 
-        arr.push_back(50)  ;	
 	arr.display() ;
-        cout << "Pushed 60\n" ; 
-        arr.push_back(60) ; 
+        cout << "pushed 30, 40 and 50 in front  \n" ; 
+	arr.push_front(30)  ;
+        arr.push_front(40)  ; 
+        arr.push_front(50)  ;	
+	arr.display() ;
+        cout << "Pushed 60 front\n" ; 
+        arr.push_front(60) ; 
         arr.display() ; 	
-	cout << "Delete 60\n" ; 
+	cout << "Delete front\n" ; 
+	arr.delete_front() ; 
+	cout << "size : " << arr.size << "\n" ;
+	arr.display() ; 
+	cout<< "Delete back\n" ;
 	arr.delete_end() ; 
 	cout << "size : " << arr.size << "\n" ;
 	arr.display() ; 
-	cout<< "Delete 50\n" ;
-	arr.delete_end() ; 
-	cout << "size : " << arr.size << "\n" ;
-	arr.display() ; 
-	cout << "Delete 40\n"  ; 
-	arr.delete_end() ; 
+	cout << "Delete front\n"  ; 
+	arr.delete_front() ; 
 	cout << "size : " << arr.size << "\n" ;
 	arr.display() ;
-        cout << "Delete 30\n"  ;
-        arr.delete_end() ;
+        cout << "Delete front\n"  ;
+        arr.delete_front() ;
         cout << "size : " << arr.size << "\n" ;
         arr.display() ;	
 	return 0 ; 
