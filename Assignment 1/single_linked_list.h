@@ -13,7 +13,7 @@ class node {
 		} 	
 };
 
-itemplate < typename T > 
+template < typename T > 
 class linked_list {
 	public : 
 		node<T>* head ;
