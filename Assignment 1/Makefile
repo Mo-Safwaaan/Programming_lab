@@ -1,7 +1,7 @@
 all : compile run
-compile: insertion_deletion_end.o
-	g++ -o output insertion_deletion_end.o
+compile: test_cases.o
+	g++ -o output test_cases.o
 testCases.o:
-	g++ -c insertion_deletion_end.cpp
+	g++ -c test_cases.cpp
 run:
 	./output
