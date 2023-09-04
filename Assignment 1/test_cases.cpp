@@ -1,5 +1,6 @@
 #include <iostream> 
 #include <time.h>
+#include <fstream>
 #include "dynamic_array.h"
 #include "single_linked_list.h"
 using namespace std ; 
@@ -10,6 +11,10 @@ int main() {
 
        	//initialize random seed 
         srand( time(NULL) );
+
+	//Create file to store results 
+	ofstream array_result ;      
+        ofstream list_result ; 
 
 	cout << "Enter Case : " ;
         cin >> option ; 
@@ -73,20 +78,24 @@ int main() {
 				for(int i=0;i<=10;i++){
 					avg += time_dynamic_array[i];
 				}
-				cout << avg/11 << " seconds" << endl;
+				cout << avg/11<< endl;
 				avg = 0;
 				cout << "Average time for Linkedlist: ";
 				for(int i=0;i<=10;i++){
 					avg += time_linked_list[i];
 				}
-				cout << avg/11 << " seconds" << endl;
+				cout << avg/11 << endl;
 				break;
 			}
 
 		case 2 : {
+		        
+			array_result.open("array_result.txt");
+			list_result.open("list_result.txt");
+
 		        // Probabilty of insertion and deletion 
                         float prob_insertion = 0.0 ;
-                        float prob_deletion = 1.0 ;
+                        float prob_deletion = 1.0 ; 
 
                         //time variable 
                         double time_dynamic_array[11][11] ;
@@ -136,6 +145,8 @@ int main() {
 
                                 	end = clock() ;
                                 	time_dynamic_array[i][k] = double( end - start )  ;
+					array_result << time_dynamic_array[i][k] << " ";
+
 
                                 	//Store time of linked list insertion and deletion 
                                 	start = clock() ;
@@ -156,11 +167,16 @@ int main() {
 
                                 	end = clock() ;
                                 	time_linked_list[i][k] = double( end - start ) ;
+					list_result << time_linked_list[i][k] << " ";
+
 
 					prob_start += 0.1 ; 
 					prob_end -= 0.1 ; 
 				}
-
+				
+				array_result<<endl;
+				list_result<<endl;
+						
                                 prob_insertion += 0.1 ;
                                 prob_deletion -= 0.1 ;
                         }
@@ -171,7 +187,7 @@ int main() {
 						avg += time_dynamic_array[i][j] ; 
 					} 
                                 }
-                                cout << avg/121 << " seconds" << endl;
+                                cout << avg/121 << endl;
                                 avg = 0;
                                 cout << "Average time for Linkedlist: ";
                                 for(int i=0;i<=10;i++){
@@ -179,9 +195,12 @@ int main() {
                                                 avg += time_linked_list[i][j] ;
                                         }
                                 }
-                                cout << avg/10 << " seconds" << endl;
-                                break;
+                                cout << avg/121 << endl;
 
+				array_result.close();
+			        list_result.close();
+
+                                break;
 			 
 			 }
 	        case 3 : break ;
