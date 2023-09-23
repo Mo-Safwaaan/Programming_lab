@@ -5,6 +5,7 @@
 
 using namespace std ;
 
+//DFS stack store elements based on finish times
 void rec_dfs1 ( int x , array<int> &visited , adjacency_matrix &adj , Stack<int> &dfs  ) {
 	visited.insert( x , 1 ) ;
         for( int i = 0 ; i < 5 ; i++ ){	
@@ -34,23 +35,30 @@ int main() {
 	cin >> ch ; 
 	switch(ch) {
 		case 1 : {
-			 	adjacency_matrix adj(5) ; 
+			 	// Create Adjacency matrix of a graph 
+				adjacency_matrix adj(5) ; 
 				adj.add_edge( 0 , 1 ) ; 
 				adj.add_edge( 1 , 2 ) ;
 			       	adj.add_edge( 2 , 0 ) ;
 				adj.add_edge( 1 , 3 ) ;
 				adj.add_edge( 3 , 4 ) ;
-				adj.display() ;
+				adj.display() ; 
 			        Stack<int> dfs ; 
-			        array<int> visited(5) ; 
-			        rec_dfs1( 0 , visited , adj , dfs ) ; 	
+			        array<int> visited(5) ;
+
+				// DFS on graph 
+			        rec_dfs1( 0 , visited , adj , dfs ) ;
+
+				//Transpose the graph	
 			        adj.transpose() ; 
-			 
+			
 				for( int i = 0 ; i < 5 ; i++ ) {
 					visited.insert( i , 0 ) ; 
 				}
 				int i = 1 ;
-			        int flag = 1 ; 	
+			        int flag = 1 ;
+
+				//DFS on transposed graph 	
 				while( !dfs.is_empty() ){
 					if( flag == 1 ) cout << "Component " << i << " : " ; 
 				        int top = dfs.curr_top() ; 
