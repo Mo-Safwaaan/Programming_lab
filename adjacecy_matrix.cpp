@@ -37,68 +37,60 @@ class adjacency_matrix {
 				cout << endl ; 
 			}
 		}
+
 		void bfs( int val ) {
-			Queue<int> bfs_queue  ;
-			array<int> bfs_list(n) ;
+			Queue<int> bfs_queue ; 
+			bfs_queue.insert(val) ;
 			array<int> visited(n) ; 
-			bfs_queue.insert( val ) ;
-			visited.insert( 0 , val ) ; 
-			int i = 0 ; 
-			while( !bfs_queue.is_empty() ){
-				int k = 1 ; 
-				int curr = bfs_queue.deletion() ;
-			        bfs_list.insert( i , curr ) ; 
-			        i++ ; 	
-				for( int j = 0 ; j < n ; j++ ) {
-					if( adj_matrix[curr]->new_array[j] == 1 && bfs_list.search(j) == 0 && visited.search(j) == 0  ) {
-						bfs_queue.insert( j ) ;
-						visited.insert( k ,  j ) ;
-					        k++ ; 	
-					 }	
-				}
-			}
-			bfs_list.display() ; 
-							
-		}
-		void dfs( int val ) {
-			Stack<int> dfs_stack ;
-			array<int> dfs_list(n) ; 
-			array<bool> visited(n) ;
-		        for( int i = 0 ; i < n ; i++ ) {
-				visited.insert( i , false ) ; 
+			visited.insert( val , 1 ) ;
+		        cout << "BFS : " ; 
+		        while( !bfs_queue.is_empty() ){
+				int curr = bfs_queue.deletion() ; 
+			        cout << curr << " " ; 
+			        visited.insert( curr , 1 ) ; 
+			        for( int i = 0 ; i < n ; i++ ) {
+					if( adj_matrix[curr]->new_array[i] == 1 && visited.new_array[i] == 0 ){
+						bfs_queue.insert(i) ; 
+						visited.insert( i , 1 ) ; 
+					}
+				}	
 			}	
-			dfs_stack.push( val ) ;  
-			visited.insert( val , true  ) ;
-			int i = 0 ; 
-			while( !dfs_stack.is_empty() ){
-				int curr = dfs_stack.curr_top() ;
-				dfs_stack.pop() ; 
-				dfs_list.insert( i , curr ) ; 
-				i++ ; 
-				for( int j = 0 ; j < n ; j++ ){
-					 if( adj_matrix[curr]->new_array[j] == 1 && dfs_list.search(j) == 0 && visited.new_array[j] == false  ) {
-					 	dfs_stack.push( j ) ; 
-						visited.insert( i  , j ) ;
-					 }
-				}  
-			}
-			dfs_list.display() ; 
-
+			cout << endl ;
 		}
 
 
+		void dfs( int val ) {
+			Stack<int> dfs_stack ; 
+			dfs_stack.push(val) ; 
+			array<int> visited(n) ; 
+			visited.insert( val , 1 ) ; 
+			cout << "DFS : " ;
+			cout << val << " " ; 
+			while( !dfs_stack.is_empty() ){
+				int curr = dfs_stack.curr_top() ; 
+				int flag = 0 ; 
+				for( int i = 0 ; i < n ; i++ ){
+					if( adj_matrix[curr]->new_array[i] == 1 && visited.new_array[i] == 0 ){
+						visited.insert( i , 1 ) ; 
+						dfs_stack.push(i) ;
+						cout << i << " " ; 
+						flag++ ; 
+						break ; 
+					}
+				}
+				if( flag == 0 ) dfs_stack.pop() ;
+			}
+			cout << endl ; 
+		}
 }; 
 
 int main() {
-	adjacency_matrix adj(4) ; 
-	adj.add_edge(0 , 1) ; 
+	adjacency_matrix adj(4) ;  
 	adj.add_edge(0 , 2) ; 
 	adj.add_edge(1 , 2) ; 
 	adj.add_edge(3 , 1) ; 
 	adj.display() ; 
-	cout << "BFS : " ;
-	adj.bfs(3) ;
-	cout << "DFS : " ; 
+	adj.bfs(2) ;
         adj.dfs(3) ;	
 	return 0 ; 
 } 
