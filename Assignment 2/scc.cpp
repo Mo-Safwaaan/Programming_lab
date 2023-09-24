@@ -27,22 +27,69 @@ void rec_dfs2( int x , array<int> &visited , adjacency_matrix &adj ){
     }
 }
 
+void tarajan_dfs( int v, int curr_index , array<int> &index , array<int> &low_link , array<int> &on_stack , Stack<int> &st , adjacency_matrix &adj ){
+	static int  comp = 1 ; 
+	index.insert( v , curr_index ) ;	
+	low_link.insert( v , index.new_array[v] ) ; 
+	curr_index++ ; 
+	st.push(v) ; 
+	on_stack.insert( v , 1 ) ; 
+	for (int i = 0 ; i < 5 ; i++ ){
+		if( adj.adj_matrix[v]->new_array[i] == 1 ) {
+
+			//successor not visited yet
+			if ( index.new_array[i] == -1 ){
+				tarajan_dfs( i , curr_index , index , low_link , on_stack , st , adj ) ;
+				if ( low_link.new_array[v] >= low_link.new_array[i] ){
+					low_link.insert( v , low_link.new_array[i]  ) ; 
+				}
+			
+			}
+			
+			//successor already on stack and current SCC
+		        else if( on_stack.new_array[i] == 1  ){
+				if( low_link.new_array[v] >= index.new_array[i] ){
+					low_link.insert( v , index.new_array[i]  ) ; 
+			}
+		}
+	  }
+	}
+	
+	//V is root node ; pop the nodes and construct an SCC
+	if( low_link.new_array[v] == index.new_array[v] ){
+		int w ; 
+		cout << "componenet " << comp << " : " ;
+	        do {    
+			if( !st.is_empty() ){
+				w = st.curr_top() ;
+			        st.pop() ; 	
+				on_stack.insert( w , 0 ) ;
+				cout << w << " " ;
+			}
+		}
+		while ( w != v ) ;  
+		cout << endl ; 
+		comp++ ; 	
+	}
+}
+
 int main() {
 	cout << "--------------------------------STRONGLY CONNECTED COMPONENTS------------------------------------------\n" ;  
         cout << "1. Kosarjus Algorithm \n2. Tarajans Algorithm\n" ; 
         cout <<	"Enter Algortihm choice : " ; 
 	int ch ; 
 	cin >> ch ; 
+	// Create Adjacency matrix of a graph
+        adjacency_matrix adj(5) ;
+        adj.add_edge( 0 , 1 ) ;
+        adj.add_edge( 1 , 2 ) ;
+        adj.add_edge( 2 , 0 ) ;
+        adj.add_edge( 1 , 3 ) ;
+        adj.add_edge( 3 , 4 ) ;
+        adj.display() ;
+
 	switch(ch) {
-		case 1 : {
-			 	// Create Adjacency matrix of a graph 
-				adjacency_matrix adj(5) ; 
-				adj.add_edge( 0 , 1 ) ; 
-				adj.add_edge( 1 , 2 ) ;
-			       	adj.add_edge( 2 , 0 ) ;
-				adj.add_edge( 1 , 3 ) ;
-				adj.add_edge( 3 , 4 ) ;
-				adj.display() ; 
+		case 1 : { 
 			        Stack<int> dfs ; 
 			        array<int> visited(5) ;
 
@@ -73,7 +120,28 @@ int main() {
 				}	
 				break ; 
 			 }
-		case 2 : break ; 
+		case 2 : { 
+				array<int> index(5) ; 
+				array<int> low_link(5) ;
+				array<int> on_stack(5) ; 
+				Stack<int> st ;
+			      	
+				//initialize	
+			        int curr_index = 0 ; 	
+				for(int i = 0 ; i < 5 ; i++){ 
+					index.insert( i , -1 ) ;
+				        low_link.insert( i , -1 ) ;
+				        on_stack.insert( i , 0 ) ; 	
+				}
+
+				for( int i = 0 ; i < 5 ; i++ ){	
+					if( index.new_array[i] == -1 ){
+						tarajan_dfs( i , curr_index , index , low_link , on_stack , st , adj ) ; 
+					}
+				}
+
+				 
+				 break ;} 
 	        default : break ; 
 	}
 	return 0 ; 
