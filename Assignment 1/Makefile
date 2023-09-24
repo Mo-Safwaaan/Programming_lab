@@ -4,4 +4,4 @@ compile: test_cases.o
 testCases.o:
 	g++ -c test_cases.cpp
 run:
-	./output
+	/usr/bin/time -f "Time: %e seconds\nMemory: %M KB" ./output 2>&1
