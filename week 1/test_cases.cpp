@@ -1,0 +1,344 @@
+#include <iostream> 
+#include <time.h>
+#include <fstream>
+#include "dynamic_array.h"
+#include "single_linked_list.h"
+using namespace std ; 
+
+int main() {
+	long int n = 100  ; 
+	int option ;
+
+       	//initialize random seed 
+        srand( time(NULL) );
+
+	//Create file to store results 
+	ofstream array_result ;      
+        ofstream list_result ; 
+
+	cout << "Enter Case : " ;
+        cin >> option ; 
+	
+	//Linked List Analysis 
+#ifdef LINKED_LIST
+	ofstream file("data.txt") ; 
+        switch(option) {	
+		case 1 :{
+			// Probabilty of insertion and deletion 
+			float prob_insertion = 0.0 ; 
+			float prob_deletion = 1.0 ;  
+
+			for(int i = 0 ; i <= 10 ; i++ ) {
+	        		linked_list<int> list ; 
+
+				//Generate random test cases and store them 
+	        		int size_insertion = prob_insertion * n  ; 
+	        		int size_deletion = prob_deletion * n  ; 
+	        
+	        		for( int j = 0 ; j < n ; j++ ) {
+					int random = rand() % 100 + 1 ;  
+		        		list.insert_end(random) ; 	
+				}
+		
+				clock_t start , end ; 
+
+				//Store time of linked list insertion and deletion 
+				start = clock() ; 
+	        		for( int j = 0 ; j < size_insertion ; j++ ){
+					list.insert_end( rand() % 100  + 1 ) ; 
+				}
+	        		for( int j = 0 ; j < size_deletion ; j++ ) {
+					list.delete_end() ;
+				}
+	        		end = clock() ; 
+			       	
+				file << prob_insertion * 100 << " " << double( end - start ) << "\n" ; 	 
+
+				prob_insertion += 0.1 ; 
+				prob_deletion -= 0.1 ;
+			}	
+				break;
+			}
+
+		case 2 : {
+		        
+			array_result.open("array_result.txt");
+			list_result.open("list_result.txt");
+
+		        // Probabilty of insertion and deletion 
+                        float prob_insertion = 0.0 ;
+                        float prob_deletion = 1.0 ; 
+
+                        //time variable 
+                        double time_dynamic_array[11][11] ;
+                        double time_linked_list[11][11] ;
+
+                        for(int i = 0 ; i <= 10 ; i++ ) {
+                                int size_insertion = prob_insertion * n  ;
+                                int size_deletion = prob_deletion * n ; 
+ 				
+				for( int k = 0 ; k <= 10 ; k++ ){
+					dynamic_array<int> arr ;
+                                	linked_list<int> list ;
+
+					for( int j = 0 ; j < n ; j++ ) {
+                                        	int random = rand() % 100 + 1 ;
+                                        	arr.push_back(random) ;
+                                        	list.insert_end(random) ;
+                                	}
+
+	
+					//Probabilty of start and end
+                                        float prob_start = 0.0 ;
+                                        float prob_end = 1.0 ;
+
+					int start_insertion = prob_start * size_insertion ; 
+			                int end_insertion = prob_end * size_insertion ; 
+			                int start_deletion = prob_start * size_deletion ; 
+			                int end_deletion = prob_end * size_deletion ; 	
+
+                                	clock_t start , end ;
+
+                                	//Store time of dynamic array insertion and deletion
+                                	start = clock() ;
+                                	for( int j = 0 ; j < start_insertion ; j++ ) {
+                                        	arr.push_front( rand() % 100 + 1 ) ;
+                                	}
+				 	for( int j = 0 ; j < end_insertion ; j++ ) {
+                                        	arr.push_back( rand() % 100 + 1 ) ;
+                                	}
+
+                                	for( int j = 0 ; j < start_deletion ; j++ ) {
+                                        	arr.delete_front() ;
+                                	}
+				 	for( int j = 0 ; j < end_deletion ; j++ ) {
+                                        	arr.delete_end() ;
+                                	}
+
+                                	end = clock() ;
+                                	time_dynamic_array[i][k] = double( end - start )  ;
+					array_result << time_dynamic_array[i][k] << " ";
+
+
+                                	//Store time of linked list insertion and deletion 
+                                	start = clock() ;
+                                	for( int j = 0 ; j < start_insertion ; j++ ) {
+                                                list.insert_front( rand() % 100 + 1 ) ;
+                                        }
+                                        for( int j = 0 ; j < end_insertion ; j++ ) {
+                                                list.insert_end( rand() % 100 + 1 ) ;
+                                        }
+
+                                        for( int j = 0 ; j < start_deletion ; j++ ) {
+                                                list.delete_front() ;
+                                        }
+                                        for( int j = 0 ; j < end_deletion ; j++ ) {
+                                                list.delete_end() ;
+                                        }
+
+
+                                	end = clock() ;
+                                	time_linked_list[i][k] = double( end - start ) ;
+					list_result << time_linked_list[i][k] << " ";
+
+
+					prob_start += 0.1 ; 
+					prob_end -= 0.1 ; 
+				}
+				
+				array_result<<endl;
+				list_result<<endl;
+						
+                                prob_insertion += 0.1 ;
+                                prob_deletion -= 0.1 ;
+                        }
+                                cout << "Average time for dynamic array: ";
+                                double avg = 0;
+                                for(int i=0;i<=10;i++){
+					for(int j=0;j<=10;j++){
+						avg += time_dynamic_array[i][j] ; 
+					} 
+                                }
+                                cout << avg/121 << endl;
+                                avg = 0;
+                                cout << "Average time for Linkedlist: ";
+                                for(int i=0;i<=10;i++){
+                                        for(int j=0;j<=10;j++){
+                                                avg += time_linked_list[i][j] ;
+                                        }
+                                }
+                                cout << avg/121 << endl;
+
+				array_result.close();
+			        list_result.close();
+
+                                break;
+			 
+			 }
+	        case 3 : break ;
+	        default : break ; 
+		}
+	file.close() ;
+#endif
+		//Dynamic Array analysis
+#ifdef DYNAMIC_ARRAY
+		ofstream file("data.txt") ; 
+	        switch(option) {
+		case 1 :{
+			// Probabilty of insertion and deletion
+			float prob_insertion = 0.0 ;
+			float prob_deletion = 1.0 ;
+
+			for(int i = 0 ; i <= 10 ; i++ ) {
+				dynamic_array<int> arr ;
+
+				//Generate random test cases and store them
+	        		int size_insertion = prob_insertion * n  ;
+	        		int size_deletion = prob_deletion * n  ;
+
+	        		for( int j = 0 ; j < n ; j++ ) {
+					int random = rand() % 100 + 1 ;
+		        		arr.push_back(random) ;
+				}
+
+				clock_t start , end ;
+
+				//Store time of dynamic array insertion and deletion
+				start = clock() ;
+				for( int j = 0 ; j < size_insertion ; j++ ) {
+					arr.push_back( rand() % 100 + 1 ) ;
+				}
+				for( int j = 0 ; j < size_deletion ; j++ ) {
+					arr.delete_end() ;
+				}
+				end = clock() ;
+
+				file << prob_insertion * 100 << " " << double( end - start ) << "\n" ; 
+
+				prob_insertion += 0.1 ;
+				prob_deletion -= 0.1 ;
+			}
+				break;
+			}
+
+		case 2 : {
+
+			array_result.open("array_result.txt");
+			list_result.open("list_result.txt");
+
+		        // Probabilty of insertion and deletion
+                        float prob_insertion = 0.0 ;
+                        float prob_deletion = 1.0 ;
+
+                        //time variable
+                        double time_dynamic_array[11][11] ;
+                        double time_linked_list[11][11] ;
+
+                        for(int i = 0 ; i <= 10 ; i++ ) {
+                                int size_insertion = prob_insertion * n  ;
+                                int size_deletion = prob_deletion * n ;
+
+				for( int k = 0 ; k <= 10 ; k++ ){
+					dynamic_array<int> arr ;
+                                	linked_list<int> list ;
+
+					for( int j = 0 ; j < n ; j++ ) {
+                                        	int random = rand() % 100 + 1 ;
+                                        	arr.push_back(random) ;
+                                        	list.insert_end(random) ;
+                                	}
+
+
+					//Probabilty of start and end
+                                        float prob_start = 0.0 ;
+                                        float prob_end = 1.0 ;
+
+					int start_insertion = prob_start * size_insertion ;
+			                int end_insertion = prob_end * size_insertion ;
+			                int start_deletion = prob_start * size_deletion ;
+			                int end_deletion = prob_end * size_deletion ;
+
+                                	clock_t start , end ;
+
+                                	//Store time of dynamic array insertion and deletion
+                                	start = clock() ;
+                                	for( int j = 0 ; j < start_insertion ; j++ ) {
+                                        	arr.push_front( rand() % 100 + 1 ) ;
+                                	}
+				 	for( int j = 0 ; j < end_insertion ; j++ ) {
+                                        	arr.push_back( rand() % 100 + 1 ) ;
+                                	}
+
+                                	for( int j = 0 ; j < start_deletion ; j++ ) {
+                                        	arr.delete_front() ;
+                                	}
+				 	for( int j = 0 ; j < end_deletion ; j++ ) {
+                                        	arr.delete_end() ;
+                                	}
+
+                                	end = clock() ;
+                                	time_dynamic_array[i][k] = double( end - start )  ;
+					array_result << time_dynamic_array[i][k] << " ";
+
+
+                                	//Store time of linked list insertion and deletion
+                                	start = clock() ;
+                                	for( int j = 0 ; j < start_insertion ; j++ ) {
+                                                list.insert_front( rand() % 100 + 1 ) ;
+                                        }
+                                        for( int j = 0 ; j < end_insertion ; j++ ) {
+                                                list.insert_end( rand() % 100 + 1 ) ;
+                                        }
+
+                                        for( int j = 0 ; j < start_deletion ; j++ ) {
+                                                list.delete_front() ;
+                                        }
+                                        for( int j = 0 ; j < end_deletion ; j++ ) {
+                                                list.delete_end() ;
+                                        }
+
+
+                                	end = clock() ;
+                                	time_linked_list[i][k] = double( end - start ) ;
+					list_result << time_linked_list[i][k] << " ";
+
+
+					prob_start += 0.1 ;
+					prob_end -= 0.1 ;
+				}
+
+				array_result<<endl;
+				list_result<<endl;
+
+                                prob_insertion += 0.1 ;
+                                prob_deletion -= 0.1 ;
+                        }
+                                cout << "Average time for dynamic array: ";
+                                double avg = 0;
+                                for(int i=0;i<=10;i++){
+					for(int j=0;j<=10;j++){
+						avg += time_dynamic_array[i][j] ;
+					}
+                                }
+                                cout << avg/121 << endl;
+                                avg = 0;
+                                cout << "Average time for Linkedlist: ";
+                                for(int i=0;i<=10;i++){
+                                        for(int j=0;j<=10;j++){
+                                                avg += time_linked_list[i][j] ;
+                                        }
+                                }
+                                cout << avg/121 << endl;
+
+				array_result.close();
+			        list_result.close();
+
+                                break;
+
+			 }
+	        case 3 : break ;
+	        default : break ;
+		}
+		file.close() ; 
+#endif
+  return 0 ;}	
