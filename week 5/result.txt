@@ -1,3 +1,2 @@
-Length of LCS is : 4
 time: 0:00.00 s
-Memory usage: 3456 KB
+Memory usage: 3584 KB
