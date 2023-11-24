@@ -1,0 +1,1 @@
+time : 0:14.65 s  Memory : 14848 KB
